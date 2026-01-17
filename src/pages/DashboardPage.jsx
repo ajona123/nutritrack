@@ -1,83 +1,53 @@
 import React, { useState, useEffect } from 'react';
 import { Building2, Users, Database, Target, AlertTriangle, FileText, Award, Map } from 'lucide-react';
-import { sekolahService, sppgService } from '../services/apiService';
+import { sppgService } from '../services/apiService';
+import { useSchool } from '../contexts/SchoolContext';
 
 // ==============================================
 // DASHBOARD PAGE - SINTA 1 LEVEL
 // ==============================================
 function DashboardPage() {
-  // Fallback data
-  const fallbackSekolahData = [
-    { id: 1, nama: 'SDN 1 Rancaekek', siswa: 245, jenjang: 'SD', status: 'layak' },
-    { id: 2, nama: 'SDN 2 Rancaekek', siswa: 198, jenjang: 'SD', status: 'layak' },
-    { id: 3, nama: 'SDN 3 Rancaekek', siswa: 312, jenjang: 'SD', status: 'waspada' },
-    { id: 4, nama: 'SDN 4 Rancaekek', siswa: 278, jenjang: 'SD', status: 'layak' },
-    { id: 5, nama: 'SDN 5 Rancaekek', siswa: 189, jenjang: 'SD', status: 'layak' },
-    { id: 6, nama: 'SDN 6 Rancaekek', siswa: 156, jenjang: 'SD', status: 'kritis' },
-    { id: 7, nama: 'SDN 7 Rancaekek', siswa: 223, jenjang: 'SD', status: 'layak' },
-    { id: 8, nama: 'SDN 8 Rancaekek', siswa: 201, jenjang: 'SD', status: 'layak' },
-  ];
-
-  const fallbackSppgData = [
-    { id: 1, nama: 'SPPG Rancaekek 1', kapasitas: 1000, produksi: 950 },
-    { id: 2, nama: 'SPPG Rancaekek 2', kapasitas: 1000, produksi: 925 },
-    { id: 3, nama: 'SPPG Rancaekek 3', kapasitas: 1000, produksi: 943 },
-    { id: 4, nama: 'SPPG Rancaekek 4', kapasitas: 1000, produksi: 982 },
-    { id: 5, nama: 'SPPG Rancaekek 5', kapasitas: 1000, produksi: 876 },
-    { id: 6, nama: 'SPPG Rancaekek 6', kapasitas: 1000, produksi: 1000 },
-    { id: 7, nama: 'SPPG Rancaekek 7', kapasitas: 1000, produksi: 951 },
-    { id: 8, nama: 'SPPG Rancaekek 8', kapasitas: 1000, produksi: 917 },
-  ];
+  // Use SchoolContext for real-time sync with 68 schools
+  const { schools, loading: schoolsLoading } = useSchool();
 
   const [selectedKecamatan, setSelectedKecamatan] = useState('all');
-  const [sekolahData, setSekolahData] = useState(fallbackSekolahData);
-  const [sppgData, setSppgData] = useState(fallbackSppgData);
+  const [sppgData, setSppgData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const kecamatanList = ['Rancaekek', 'SD Negeri', 'SD Swasta'];
+  const kecamatanList = ['Rancaekek'];
 
-  // Fetch data from API on component mount
+  // Fetch SPPG data from API on component mount
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchSppgData = async () => {
       try {
         setLoading(true);
-        const [sekolahRes, sppgRes] = await Promise.all([
-          sekolahService.getAll(),
-          sppgService.getAll()
-        ]);
+        const sppgRes = await sppgService.getAll();
 
-        if (sekolahRes.success) {
-          setSekolahData(sekolahRes.data || fallbackSekolahData);
+        if (sppgRes.success && sppgRes.data) {
+          setSppgData(sppgRes.data);
         } else {
-          setSekolahData(fallbackSekolahData);
+          setSppgData([]);
         }
 
-        if (sppgRes.success) {
-          setSppgData(sppgRes.data || fallbackSppgData);
-        } else {
-          setSppgData(fallbackSppgData);
-        }
-
-        if (!sekolahRes.success || !sppgRes.success) {
-          setError('Menggunakan data fallback - Backend belum siap');
+        if (!sppgRes.success) {
+          setError('Gagal memuat data SPPG');
         }
       } catch (err) {
         setError(err.message);
-        setSekolahData(fallbackSekolahData);
-        setSppgData(fallbackSppgData);
+        setSppgData([]);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchData();
+    fetchSppgData();
   }, []);
 
   return (
     <div className="p-6 space-y-6">
       {/* Loading State */}
-      {loading && (
+      {(loading || schoolsLoading) && (
         <div className="flex items-center justify-center h-40 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl">
           <div className="text-center">
             <div className="inline-block">
@@ -125,7 +95,7 @@ function DashboardPage() {
         <DashboardMetricCard
           icon={Building2}
           title="Total Sekolah"
-          value={(sekolahData?.length || 0).toString()}
+          value={(schools?.length || 0).toString()}
           subtitle="SD Kec. Rancaekek"
           change="+0"
           changeLabel="Stabil"
@@ -135,7 +105,7 @@ function DashboardPage() {
         <DashboardMetricCard
           icon={Users}
           title="Total Siswa MBG"
-          value={((sekolahData?.reduce((sum, s) => sum + (s?.siswa || 0), 0) || 0)).toLocaleString()}
+          value={((schools?.reduce((sum, s) => sum + (s?.siswa || 0), 0) || 0)).toLocaleString()}
           subtitle="Penerima manfaat"
           change="+0%"
           changeLabel="Data REAL Dapodik"
@@ -155,8 +125,8 @@ function DashboardPage() {
         <DashboardMetricCard
           icon={Target}
           title="Biaya Per Hari"
-          value={`Rp${(((sekolahData?.reduce((sum, s) => sum + (s?.siswa || 0), 0) || 0) * 20000) / 1000000).toFixed(2)}J`}
-          subtitle={`Rp${((sekolahData?.reduce((sum, s) => sum + (s?.siswa || 0), 0) || 0) * 20000).toLocaleString()}`}
+          value={`Rp${(((schools?.reduce((sum, s) => sum + (s?.siswa || 0), 0) || 0) * 20000) / 1000000).toFixed(2)}J`}
+          subtitle={`Rp${((schools?.reduce((sum, s) => sum + (s?.siswa || 0), 0) || 0) * 20000).toLocaleString()}`}
           change={`+${(sppgData?.length || 0) * 3}`}
           changeLabel="Mobil distribusi"
           color="orange"
