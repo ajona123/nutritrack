@@ -1293,7 +1293,11 @@ function DetailPanel({ type, data, onClose }) {
             <DetailMetricCompact label="Siswa" value={data.siswa?.toString()} icon={Users} />
             <DetailMetricCompact label="Jenjang" value={data.jenjang?.toUpperCase()} icon={Building2} />
             <DetailMetricCompact label="Status" value={data.status?.toUpperCase()} icon={Award} color={data.status} />
-            <DetailMetricCompact label="SPPG" value={data.sppg?.split(' ').slice(-2).join(' ')} icon={Database} />
+            <DetailMetricCompact label="SPPG" value={
+              typeof data.sppg === 'string' 
+                ? data.sppg.split(' ').slice(-2).join(' ')
+                : `SPPG Rancaekek ${data.sppg || 'N/A'}`
+            } icon={Database} />
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-3">

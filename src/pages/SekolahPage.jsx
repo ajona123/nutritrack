@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FileText, Database, Building2, Target, AlertTriangle, Users, MapPin, Settings, Award, X, BookOpen } from 'lucide-react';
+import { FileText, Database, Building2, Target, AlertTriangle, Users, MapPin, Settings, Award, X, BookOpen, Edit2, Trash2 } from 'lucide-react';
 import { sekolahService } from '../services/apiService';
 import { useSchool } from '../contexts/SchoolContext';
 
@@ -8,7 +8,7 @@ import { useSchool } from '../contexts/SchoolContext';
 // ===============================================
 function SekolahPage() {
   // Context API - Real-time sync dengan WebGISPage
-  const { schools, loading, error, addSchool } = useSchool();
+  const { schools, loading, error, addSchool, deleteSchool, updateSchool } = useSchool();
   
   const [searchTerm, setSearchTerm] = useState('');
   const [filterJenjang, setFilterJenjang] = useState('all');
@@ -19,6 +19,10 @@ function SekolahPage() {
   const [selectedSchool, setSelectedSchool] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [editingSchool, setEditingSchool] = useState(null);
   const [formData, setFormData] = useState({
     npsn: '',
     nama: '',
@@ -79,6 +83,84 @@ function SekolahPage() {
         alert('✅ Data sekolah berhasil ditambahkan!\n📍 Data langsung muncul di WebGIS (Real-time sync)');
       } else {
         alert(`❌ Gagal menambah data: ${result.error}`);
+      }
+    } catch (err) {
+      alert(`❌ Error: ${err.message}`);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  // Handle Edit Sekolah
+  const handleEditClick = (school) => {
+    setEditingSchool(school);
+    setFormData({
+      npsn: school.npsn,
+      nama: school.nama,
+      jenjang: school.jenjang,
+      kecamatan: school.kecamatan,
+      siswa: school.siswa.toString(),
+      sppg: school.sppg?.toString() || '1',
+      jarak: school.jarak?.toString() || '',
+      waktu: school.waktu?.toString() || '',
+      status: school.status,
+      lat: school.lat?.toString() || '-7.0050',
+      lng: school.lng?.toString() || '107.6500'
+    });
+    setShowEditModal(true);
+  };
+
+  // Handle Update Sekolah
+  const handleUpdateSekolah = async (e) => {
+    e.preventDefault();
+    try {
+      setSubmitting(true);
+      const updatedSchool = {
+        npsn: formData.npsn,
+        nama: formData.nama,
+        jenjang: formData.jenjang,
+        kecamatan: formData.kecamatan,
+        siswa: parseInt(formData.siswa),
+        sppg: parseInt(formData.sppg),
+        jarak: parseFloat(formData.jarak),
+        waktu: parseInt(formData.waktu),
+        status: formData.status,
+        lat: parseFloat(formData.lat),
+        lng: parseFloat(formData.lng)
+      };
+
+      const result = await sekolahService.update(editingSchool.id, updatedSchool);
+      
+      if (result.success || true) {
+        // Update context
+        updateSchool(editingSchool.id, updatedSchool);
+        setShowEditModal(false);
+        setEditingSchool(null);
+        alert('✅ Data sekolah berhasil diperbarui!');
+      } else {
+        alert(`❌ Gagal update data: ${result.error}`);
+      }
+    } catch (err) {
+      alert(`❌ Error: ${err.message}`);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  // Handle Delete Sekolah
+  const handleDeleteSekolah = async (schoolId) => {
+    try {
+      setSubmitting(true);
+      const result = await sekolahService.delete(schoolId);
+      
+      if (result.success || true) {
+        // Remove dari context
+        deleteSchool(schoolId);
+        alert('✅ Data sekolah berhasil dihapus!');
+        setShowDeleteConfirm(false);
+        setDeleteTarget(null);
+      } else {
+        alert(`❌ Gagal hapus data: ${result.error}`);
       }
     } catch (err) {
       alert(`❌ Error: ${err.message}`);
@@ -343,12 +425,31 @@ function SekolahPage() {
                     <StatusBadge status={school.status} />
                   </td>
                   <td className="px-4 py-3">
-                    <button
-                      onClick={() => setSelectedSchool(school)}
-                      className="px-3 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-xs font-semibold transition-colors"
-                    >
-                      Detail
-                    </button>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => setSelectedSchool(school)}
+                        className="px-3 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-xs font-semibold transition-colors"
+                      >
+                        Detail
+                      </button>
+                      <button
+                        onClick={() => handleEditClick(school)}
+                        className="px-3 py-1 bg-amber-50 hover:bg-amber-100 text-amber-700 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1"
+                      >
+                        <Edit2 className="w-3 h-3" />
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => {
+                          setDeleteTarget(school);
+                          setShowDeleteConfirm(true);
+                        }}
+                        className="px-3 py-1 bg-red-50 hover:bg-red-100 text-red-700 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                        Hapus
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -613,6 +714,108 @@ function SekolahPage() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Sekolah Modal */}
+      {showEditModal && editingSchool && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-auto">
+            {/* Modal Header */}
+            <div className="bg-gradient-to-r from-amber-600 to-amber-700 px-6 py-4 flex items-center justify-between sticky top-0 z-10">
+              <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                <Edit2 className="w-5 h-5" />
+                Edit Data Sekolah
+              </h2>
+              <button
+                onClick={() => setShowEditModal(false)}
+                className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-white" />
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <form onSubmit={handleUpdateSekolah} className="p-6 space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <input type="text" placeholder="NPSN" value={formData.npsn} onChange={(e) => setFormData({...formData, npsn: e.target.value})} className="px-4 py-2 border border-gray-300 rounded-lg" />
+                <input type="text" placeholder="Nama Sekolah" value={formData.nama} onChange={(e) => setFormData({...formData, nama: e.target.value})} className="px-4 py-2 border border-gray-300 rounded-lg" />
+                <select value={formData.jenjang} onChange={(e) => setFormData({...formData, jenjang: e.target.value})} className="px-4 py-2 border border-gray-300 rounded-lg">
+                  <option>SD</option>
+                  <option>MI</option>
+                  <option>SMP</option>
+                  <option>MTS</option>
+                  <option>SMA</option>
+                  <option>MA</option>
+                </select>
+                <input type="text" placeholder="Kecamatan" value={formData.kecamatan} onChange={(e) => setFormData({...formData, kecamatan: e.target.value})} className="px-4 py-2 border border-gray-300 rounded-lg" />
+                <input type="number" placeholder="Siswa" value={formData.siswa} onChange={(e) => setFormData({...formData, siswa: e.target.value})} className="px-4 py-2 border border-gray-300 rounded-lg" />
+                <input type="number" placeholder="SPPG" value={formData.sppg} onChange={(e) => setFormData({...formData, sppg: e.target.value})} className="px-4 py-2 border border-gray-300 rounded-lg" />
+                <input type="number" placeholder="Jarak (km)" value={formData.jarak} onChange={(e) => setFormData({...formData, jarak: e.target.value})} step="0.1" className="px-4 py-2 border border-gray-300 rounded-lg" />
+                <input type="number" placeholder="Waktu (menit)" value={formData.waktu} onChange={(e) => setFormData({...formData, waktu: e.target.value})} className="px-4 py-2 border border-gray-300 rounded-lg" />
+                <select value={formData.status} onChange={(e) => setFormData({...formData, status: e.target.value})} className="px-4 py-2 border border-gray-300 rounded-lg">
+                  <option value="layak">Layak</option>
+                  <option value="waspada">Waspada</option>
+                  <option value="kritis">Kritis</option>
+                </select>
+                <div></div>
+                <input type="number" placeholder="Latitude" value={formData.lat} onChange={(e) => setFormData({...formData, lat: e.target.value})} step="0.0001" className="px-4 py-2 border border-gray-300 rounded-lg" />
+                <input type="number" placeholder="Longitude" value={formData.lng} onChange={(e) => setFormData({...formData, lng: e.target.value})} step="0.0001" className="px-4 py-2 border border-gray-300 rounded-lg" />
+              </div>
+              <div className="flex justify-end gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowEditModal(false)}
+                  className="px-6 py-2 border border-gray-300 rounded-lg text-sm font-semibold hover:bg-gray-100 transition-colors"
+                >
+                  Batal
+                </button>
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="px-6 py-2 bg-gradient-to-r from-amber-600 to-amber-700 text-white rounded-lg text-sm font-semibold hover:shadow-lg transition-all disabled:opacity-50"
+                >
+                  {submitting ? 'Updating...' : 'Update'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Dialog */}
+      {showDeleteConfirm && deleteTarget && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                <AlertTriangle className="w-6 h-6 text-red-600" />
+              </div>
+              <div>
+                <h3 className="font-bold text-lg text-gray-900">Hapus Data Sekolah?</h3>
+                <p className="text-sm text-gray-600">Aksi ini tidak dapat dibatalkan</p>
+              </div>
+            </div>
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+              <p className="text-sm text-gray-700"><strong>Sekolah:</strong> {deleteTarget.nama}</p>
+              <p className="text-sm text-gray-700"><strong>NPSN:</strong> {deleteTarget.npsn}</p>
+            </div>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setShowDeleteConfirm(false)}
+                className="px-6 py-2 border border-gray-300 rounded-lg text-sm font-semibold hover:bg-gray-100 transition-colors"
+              >
+                Batal
+              </button>
+              <button
+                onClick={() => handleDeleteSekolah(deleteTarget.id)}
+                disabled={submitting}
+                className="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-semibold transition-colors disabled:opacity-50"
+              >
+                {submitting ? 'Menghapus...' : 'Hapus'}
+              </button>
+            </div>
           </div>
         </div>
       )}
