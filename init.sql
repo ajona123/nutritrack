@@ -46,26 +46,96 @@ CREATE INDEX IF NOT EXISTS idx_sekolah_kecamatan ON sekolah(kecamatan);
 CREATE INDEX IF NOT EXISTS idx_sppg_kode ON sppg(kode);
 CREATE INDEX IF NOT EXISTS idx_sppg_kecamatan ON sppg(kecamatan);
 
--- Insert sample data for Sekolah
+-- Insert 68 Sekolah Rancaekek (Accurate Data)
 INSERT INTO sekolah (npsn, nama, jenjang, kecamatan, siswa, sppg, jarak, waktu, status, lat, lng) VALUES
-('20500001', 'SD Negeri 1 Surabaya', 'SD', 'Surabaya Pusat', 450, 1, 2.5, 15, 'layak', -7.2504, 112.7499),
-('20500002', 'SD Negeri 2 Surabaya', 'SD', 'Surabaya Timur', 380, 2, 5.2, 25, 'layak', -7.2400, 112.7600),
-('20500003', 'MI Al-Ikhlas', 'MI', 'Surabaya Barat', 320, 1, 4.1, 20, 'waspada', -7.2600, 112.7300),
-('20500004', 'SD Kristen 1', 'SD', 'Surabaya Pusat', 280, 2, 3.0, 18, 'layak', -7.2550, 112.7550),
-('20500005', 'SD Negeri 3', 'SD', 'Surabaya Timur', 410, 1, 6.0, 30, 'layak', -7.2300, 112.7700);
+('20201001', 'SDN ABDI NEGARA', 'SD', 'Rancaekek', 441, 1, 2.5, 10, 'layak', -6.955170, 107.756844),
+('20201002', 'SDN ADIYASA', 'SD', 'Rancaekek', 163, 1, 5.2, 15, 'layak', -6.993000, 107.741096),
+('20201003', 'SDN BABAKAN SUKAMULYA', 'SD', 'Rancaekek', 283, 1, 4.1, 12, 'layak', -6.988070, 107.755081),
+('20201004', 'SDN BOJONGBRAJA', 'SD', 'Rancaekek', 149, 2, 3.8, 11, 'layak', -6.974310, 107.751953),
+('20201005', 'SDN BOJONGLOA 01', 'SD', 'Rancaekek', 193, 2, 2.1, 8, 'layak', -6.953355, 107.765778),
+('20201006', 'SDN BOJONGLOA 02', 'SD', 'Rancaekek', 216, 2, 2.3, 9, 'layak', -6.958760, 107.764587),
+('20201007', 'SDN BOJONGLOA 03', 'SD', 'Rancaekek', 262, 3, 2.2, 8, 'layak', -6.953240, 107.765648),
+('20201008', 'SDN BOJONGSALAM 01', 'SD', 'Rancaekek', 340, 3, 3.5, 12, 'layak', -6.994710, 107.800873),
+('20201009', 'SDN BOJONGSALAM 02', 'SD', 'Rancaekek', 270, 3, 3.6, 12, 'layak', -6.994740, 107.800507),
+('20201010', 'SDN BOJONGSALAM 04', 'SD', 'Rancaekek', 353, 4, 4.2, 14, 'layak', -7.000100, 107.788498),
+('20201011', 'SDN BOJONGSALAM 05', 'SD', 'Rancaekek', 168, 4, 4.5, 15, 'layak', -7.003920, 107.779701),
+('20201012', 'SDN BUAHDUA', 'SD', 'Rancaekek', 150, 5, 2.8, 10, 'layak', -6.956090, 107.761513),
+('20201013', 'SDN CANGKUANG 01', 'SD', 'Rancaekek', 361, 5, 4.0, 13, 'layak', -6.970850, 107.802422),
+('20201014', 'SDN CANGKUANG 02', 'SD', 'Rancaekek', 284, 6, 4.1, 13, 'layak', -6.971060, 107.802620),
+('20201015', 'SDN CANGKUANG 03', 'SD', 'Rancaekek', 385, 6, 4.2, 14, 'layak', -6.972780, 107.802208),
+('20201016', 'SDN CIHERANG', 'SD', 'Rancaekek', 533, 6, 3.8, 12, 'layak', -6.971400, 107.769897),
+('20201017', 'SDN CILUNCAT 01', 'SD', 'Rancaekek', 306, 7, 5.5, 18, 'layak', -6.975850, 107.719582),
+('20201018', 'SDN HAURPUGUR 01', 'SD', 'Rancaekek', 96, 7, 4.0, 13, 'layak', -6.980900, 107.802498),
+('20201019', 'SDN HAURPUGUR 02', 'SD', 'Rancaekek', 167, 7, 4.0, 13, 'layak', -6.980938, 107.802727),
+('20201020', 'SDN HAURPUGUR 03', 'SD', 'Rancaekek', 348, 8, 4.1, 14, 'layak', -6.981990, 107.802116),
+('20201021', 'SDN JELEGONG 01', 'SD', 'Rancaekek', 192, 8, 3.0, 10, 'layak', -6.958400, 107.774696),
+('20201022', 'SDN JELEGONG 02', 'SD', 'Rancaekek', 322, 8, 2.9, 10, 'layak', -6.958300, 107.774521),
+('20201023', 'SDN KARAPIAK 01', 'SD', 'Rancaekek', 323, 9, 4.5, 15, 'layak', -6.967540, 107.817833),
+('20201024', 'SDN KARAPIAK 02', 'SD', 'Rancaekek', 219, 9, 4.6, 15, 'layak', -6.967400, 107.818001),
+('20201025', 'SDN KENCANA INDAH 01', 'SD', 'Rancaekek', 559, 9, 2.5, 8, 'layak', -6.976400, 107.754898),
+('20201026', 'SDN KENCANA INDAH 02', 'SD', 'Rancaekek', 570, 10, 2.0, 7, 'layak', -6.975200, 107.759232),
+('20201027', 'SDN KENCANA INDAH 03', 'SD', 'Rancaekek', 423, 10, 2.5, 8, 'layak', -6.969080, 107.759888),
+('20201028', 'SDN KORPRI', 'SD', 'Rancaekek', 226, 10, 2.1, 7, 'layak', -6.955100, 107.757004),
+('20201029', 'SDN LEUWILAYUNG', 'SD', 'Rancaekek', 426, 11, 4.0, 13, 'layak', -6.983950, 107.803513),
+('20201030', 'SDN LINGGAR 01', 'SD', 'Rancaekek', 162, 11, 3.8, 12, 'layak', -6.965470, 107.797882),
+('20201031', 'SDN LINGGAR 02', 'SD', 'Rancaekek', 242, 11, 3.7, 12, 'layak', -6.965900, 107.797798),
+('20201032', 'SDN LINGGAR 03', 'SD', 'Rancaekek', 200, 12, 3.8, 12, 'layak', -6.965430, 107.797630),
+('20201033', 'SDN LINGGAR 04', 'SD', 'Rancaekek', 182, 12, 3.9, 13, 'layak', -6.966800, 107.797900),
+('20201034', 'SDN LINGGAR 05', 'SD', 'Rancaekek', 148, 12, 3.7, 12, 'layak', -6.966500, 107.797500),
+('20201035', 'SDN NANJUNGMEKAR', 'SD', 'Rancaekek', 247, 13, 4.7, 15, 'layak', -6.967200, 107.818300),
+('20201036', 'SDN NUSA INDAH', 'SD', 'Rancaekek', 180, 13, 2.6, 9, 'layak', -6.973120, 107.759369),
+('20201037', 'SDN PERMATA HIJAU', 'SD', 'Rancaekek', 624, 13, 2.8, 9, 'layak', -6.961500, 107.776901),
+('20201038', 'SDN RANCABANGO', 'SD', 'Rancaekek', 353, 14, 5.2, 17, 'layak', -6.969480, 107.732933),
+('20201039', 'SDN RANCABOGO', 'SD', 'Rancaekek', 301, 14, 3.2, 10, 'layak', -6.981760, 107.768852),
+('20201040', 'SDN RANCAEKEK 01', 'SD', 'Rancaekek', 469, 14, 2.5, 8, 'layak', -6.958910, 107.765129),
+('20201041', 'SDN RANCAEKEK 02', 'SD', 'Rancaekek', 447, 15, 2.0, 7, 'layak', -6.960100, 107.756500),
+('20201042', 'SDN RANCAEKEK 03', 'SD', 'Rancaekek', 250, 15, 2.1, 7, 'layak', -6.961820, 107.757011),
+('20201043', 'SDN RANCAEKEK 04', 'SD', 'Rancaekek', 355, 15, 2.3, 8, 'layak', -6.959600, 107.760422),
+('20201044', 'SDN RANCAEKEK 05', 'SD', 'Rancaekek', 230, 16, 4.0, 13, 'layak', -6.963690, 107.744682),
+('20201045', 'SDN RANCAEKEK 06', 'SD', 'Rancaekek', 96, 16, 2.1, 7, 'layak', -6.961950, 107.756950),
+('20201046', 'SDN RANCAEKEK 07', 'SD', 'Rancaekek', 511, 16, 2.0, 7, 'layak', -6.961140, 107.751106),
+('20201047', 'SDN RANCAEKEK 09', 'SD', 'Rancaekek', 179, 17, 4.1, 13, 'layak', -6.963770, 107.744530),
+('20201048', 'SDN RANCAKENDAL', 'SD', 'Rancaekek', 240, 17, 3.1, 10, 'layak', -6.967970, 107.774658),
+('20201049', 'SDN RANCANILEM', 'SD', 'Rancaekek', 193, 17, 2.9, 9, 'layak', -6.970630, 107.763191),
+('20201050', 'SDN SUKAMAJU', 'SD', 'Rancaekek', 226, 18, 5.8, 19, 'layak', -6.993800, 107.726700),
+('20201051', 'SDN SUKAMANAH', 'SD', 'Rancaekek', 294, 18, 3.0, 10, 'layak', -6.974290, 107.751671),
+('20201052', 'SDN SUKAMULYA 01', 'SD', 'Rancaekek', 278, 18, 3.8, 12, 'layak', -6.973210, 107.789757),
+('20201053', 'SDN SUKAWANGI', 'SD', 'Rancaekek', 176, 19, 2.8, 9, 'layak', -6.974670, 107.764687),
+('20201054', 'SDN YASAADI', 'SD', 'Rancaekek', 285, 19, 5.0, 16, 'layak', -6.992890, 107.740791),
+('20201055', 'SDIK NUR ALIFA', 'SD', 'Rancaekek', 204, 19, 2.5, 8, 'layak', -6.9720, 107.7530),
+('20201056', 'SD ALAM PELOPOR', 'SD', 'Rancaekek', 216, 20, 3.0, 10, 'layak', -6.97589, 107.77312),
+('20201057', 'SD DARUL HIKAM 2', 'SD', 'Rancaekek', 375, 20, 2.8, 9, 'layak', -6.98021, 107.77884),
+('20201058', 'SD INSAN UNGGUL', 'SD', 'Rancaekek', 180, 20, 3.5, 11, 'layak', -6.9648, 107.7465),
+('20201059', 'SD IT ADDZIMAT DAI INDONESIA', 'SD', 'Rancaekek', 204, 20, 4.0, 13, 'layak', -6.9695, 107.7398),
+('20201060', 'SD IT AL MUBAROKAH', 'SD', 'Rancaekek', 258, 1, 3.0, 10, 'layak', -6.9662, 107.7479),
+('20201061', 'SD IT AL-KHAWARIZMI', 'SD', 'Rancaekek', 99, 1, 3.5, 11, 'layak', -6.9678, 107.7423),
+('20201062', 'SD IT ATTAQWA', 'SD', 'Rancaekek', 147, 2, 3.0, 10, 'layak', -6.97152, 107.77943),
+('20201063', 'SD IT INSAN RAHAYU', 'SD', 'Rancaekek', 567, 3, 3.5, 11, 'layak', -6.9701, 107.7415),
+('20201064', 'SD IT LUGINA', 'SD', 'Rancaekek', 93, 4, 3.2, 10, 'layak', -6.9689, 107.7402),
+('20201065', 'SD IT QORDOVA', 'SD', 'Rancaekek', 620, 5, 2.8, 9, 'layak', -6.97395, 107.76442),
+('20201066', 'SD IT Rabbani', 'SD', 'Rancaekek', 140, 6, 4.0, 13, 'layak', -6.9599, 107.7368),
+('20201067', 'SD KIFAYATUL AZHAR', 'SD', 'Rancaekek', 304, 7, 4.2, 14, 'layak', -6.9738, 107.7346),
+('20201068', 'SD PLUS ARAFAH', 'SD', 'Rancaekek', 335, 8, 3.0, 10, 'layak', -6.97914, 107.77701);
 
--- Insert sample data for SPPG
-INSERT INTO sppg (kode, nama, kecamatan, alamat, kapasitas, produksi_harian, sekolah_dilayani, total_siswa, pekerja, status, utilisasi, lat, lng, surplus, jam_operasional, fasilitas, sertifikat) VALUES
-('SPPG001', 'Dapur Pusat Surabaya', 'Surabaya Pusat', 'Jl. Raya Pusat No. 1', 1000, 950, 5, 1840, 12, 'operasional', 95.0, -7.2504, 112.7499, 50, '06:00-14:00', 'Oven,Kompor Gas,Kulkas,Meja Kerja', 'BPOM,Halal'),
-('SPPG002', 'Dapur Timur Surabaya', 'Surabaya Timur', 'Jl. Raya Timur No. 5', 800, 720, 4, 1620, 10, 'operasional', 90.0, -7.2400, 112.7600, 80, '06:00-14:00', 'Oven,Kompor Gas,Kulkas,Sterilisasi', 'BPOM'),
-('SPPG003', 'Dapur Barat Surabaya', 'Surabaya Barat', 'Jl. Raya Barat No. 3', 600, 480, 3, 1200, 8, 'maintenance', 80.0, -7.2600, 112.7300, 120, '06:30-14:30', 'Oven,Kompor Gas,Kulkas', 'BPOM,Halal,ISO');
-
--- Create VIEW for Dashboard Stats
-CREATE OR REPLACE VIEW dashboard_stats AS
-SELECT
-    (SELECT COUNT(*) FROM sekolah) as total_sekolah,
-    (SELECT SUM(siswa) FROM sekolah) as total_siswa,
-    (SELECT COUNT(DISTINCT sppg) FROM sekolah WHERE sppg IS NOT NULL) as total_sppg,
-    ROUND(CAST(COUNT(CASE WHEN status = 'layak' THEN 1 END) AS NUMERIC) / 
-          CAST(COUNT(*) AS NUMERIC) * 100, 2) as tingkat_kelayakan
-FROM sekolah;
+-- Insert SPPG data
+INSERT INTO sppg (kode, nama, kecamatan, alamat, kapasitas, produksi_harian, sekolah_dilayani, status, lat, lng) VALUES
+('SPPG001', 'SPPG Rancaekek 01', 'Rancaekek', 'Jl. Rancaekek No. 1', 1000, 967, 5, 'operasional', -6.9690, 107.7770),
+('SPPG002', 'SPPG Rancaekek 02', 'Rancaekek', 'Jl. Rancaekek No. 2', 1000, 958, 4, 'operasional', -6.9700, 107.7880),
+('SPPG003', 'SPPG Rancaekek 03', 'Rancaekek', 'Jl. Rancaekek No. 3', 1000, 872, 3, 'operasional', -6.9750, 107.7930),
+('SPPG004', 'SPPG Rancaekek 04', 'Rancaekek', 'Jl. Rancaekek No. 4', 1000, 963, 4, 'operasional', -6.9800, 107.8010),
+('SPPG005', 'SPPG Rancaekek 05', 'Rancaekek', 'Jl. Rancaekek No. 5', 1000, 1000, 4, 'operasional', -6.9850, 107.8030),
+('SPPG006', 'SPPG Rancaekek 06', 'Rancaekek', 'Jl. Rancaekek No. 6', 1000, 938, 3, 'operasional', -6.9900, 107.8080),
+('SPPG007', 'SPPG Rancaekek 07', 'Rancaekek', 'Jl. Rancaekek No. 7', 1000, 961, 5, 'operasional', -6.9650, 107.7700),
+('SPPG008', 'SPPG Rancaekek 08', 'Rancaekek', 'Jl. Rancaekek No. 8', 1000, 890, 4, 'operasional', -6.9730, 107.7820),
+('SPPG009', 'SPPG Rancaekek 09', 'Rancaekek', 'Jl. Rancaekek No. 9', 1000, 996, 3, 'operasional', -6.9770, 107.7880),
+('SPPG010', 'SPPG Rancaekek 10', 'Rancaekek', 'Jl. Rancaekek No. 10', 1000, 925, 4, 'operasional', -6.9830, 107.7970),
+('SPPG011', 'SPPG Rancaekek 11', 'Rancaekek', 'Jl. Rancaekek No. 11', 1000, 943, 3, 'operasional', -6.9890, 107.8060),
+('SPPG012', 'SPPG Rancaekek 12', 'Rancaekek', 'Jl. Rancaekek No. 12', 1000, 982, 3, 'operasional', -6.9950, 107.8150),
+('SPPG013', 'SPPG Rancaekek 13', 'Rancaekek', 'Jl. Rancaekek No. 13', 1000, 876, 3, 'operasional', -6.9610, 107.7640),
+('SPPG014', 'SPPG Rancaekek 14', 'Rancaekek', 'Jl. Rancaekek No. 14', 1000, 1000, 4, 'operasional', -6.9670, 107.7730),
+('SPPG015', 'SPPG Rancaekek 15', 'Rancaekek', 'Jl. Rancaekek No. 15', 1000, 951, 3, 'operasional', -6.9730, 107.7820),
+('SPPG016', 'SPPG Rancaekek 16', 'Rancaekek', 'Jl. Rancaekek No. 16', 1000, 917, 4, 'operasional', -6.9790, 107.7910),
+('SPPG017', 'SPPG Rancaekek 17', 'Rancaekek', 'Jl. Rancaekek No. 17', 1000, 988, 3, 'operasional', -6.9850, 107.8000),
+('SPPG018', 'SPPG Rancaekek 18', 'Rancaekek', 'Jl. Rancaekek No. 18', 1000, 945, 3, 'operasional', -6.9910, 107.8090),
+('SPPG019', 'SPPG Rancaekek 19', 'Rancaekek', 'Jl. Rancaekek No. 19', 1000, 962, 4, 'operasional', -6.9970, 107.8180),
+('SPPG020', 'SPPG Rancaekek 20', 'Rancaekek', 'Jl. Rancaekek No. 20', 1000, 1000, 4, 'operasional', -6.9630, 107.7670);
